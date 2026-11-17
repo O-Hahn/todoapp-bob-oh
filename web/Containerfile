@@ -2,24 +2,39 @@
 # BUILD_ARCH: arm64
 
 # Stage 1: Build
-FROM --platform=$BUILDPLATFORM registry.access.redhat.com/ubi9/nodejs-20:latest AS builder
+FROM --platform=$BUILDPLATFORM registry.access.redhat.com/ubi9/nodejs-22:latest AS builder
+USER root
 WORKDIR /opt/app-root/src
 
-COPY package*.json ./
-COPY web/package*.json ./web/
-COPY tsconfig.base.json ./
+COPY --chown=1001:0 package*.json tsconfig.base.json ./
+COPY --chown=1001:0 web/package*.json ./web/
+COPY --chown=1001:0 web/tsconfig*.json ./web/
+COPY --chown=1001:0 web/vite.config.ts ./web/
+COPY --chown=1001:0 web/index.html ./web/
 
+RUN chown -R 1001:0 /opt/app-root && \
+    chmod -R g+rwX /opt/app-root
+
+USER 1001
 RUN npm ci --workspace=web
 
-COPY web ./web
+USER root
+COPY --chown=1001:0 web/src ./web/src
+RUN chown -R 1001:0 /opt/app-root && \
+    chmod -R g+rwX /opt/app-root
 
+USER 1001
 RUN npm run build --workspace=web
 
 # Stage 2: Runtime
 FROM --platform=linux/amd64 registry.access.redhat.com/ubi9/nginx-124:latest
+USER root
 
-COPY --from=builder /opt/app-root/src/web/dist /usr/share/nginx/html
-COPY web/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY --chown=1001:0 --from=builder /opt/app-root/src/web/dist /usr/share/nginx/html
+COPY --chown=1001:0 web/nginx/nginx.conf /etc/nginx/nginx.conf
+
+RUN chmod -R g+rX /usr/share/nginx/html /etc/nginx && \
+    chmod -R g+rwX /var/log/nginx /var/run /tmp
 
 USER 1001
 EXPOSE 8080

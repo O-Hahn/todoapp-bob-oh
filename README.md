@@ -74,7 +74,7 @@ A modern, multi-user ToDo single-page web application built with the **IBM Carbo
 
 ### Prerequisites
 
-- **Node.js:** v20+ or v22+ LTS
+- **Node.js:** v22 LTS
 - **npm:** v10+
 - **Podman** or **Docker** (for container builds and local stack)
 - **OpenShift CLI (`oc`)** & **Kustomize** (for cluster deployment)
@@ -203,7 +203,7 @@ make smoke-openshift
 
 ## Security Compliance Summary
 
-- **Container Images:** Red Hat UBI 9 minimal base images (`registry.access.redhat.com/ubi9/nodejs-20-minimal`, `registry.access.redhat.com/ubi9/nginx-124`).
+- **Container Images:** Red Hat UBI 9 minimal base images (`registry.access.redhat.com/ubi9/nodejs-22-minimal`, `registry.access.redhat.com/ubi9/nginx-124`).
 - **Privilege Separation:** Non-root execution (`USER 1001`), `readOnlyRootFilesystem: true`, `allowPrivilegeEscalation: false`, capabilities dropped (`ALL`).
 - **Network Security:** TLS 1.2+ edge termination on OpenShift Routes with HTTP-to-HTTPS redirect. No services bound to public interfaces. NetworkPolicies restrict ingress/egress.
 - **Credential Hygiene:** Secrets stored in Kubernetes Secrets and injected via `secretKeyRef`. Argon2 password hashing. No secrets logged in logs or committed to git.

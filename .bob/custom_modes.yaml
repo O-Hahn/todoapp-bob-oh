@@ -360,7 +360,7 @@ customModes:
         `# DEPLOY_TARGET: openshift | code-engine | local`
         `# BUILD_ARCH: arm64 | amd64`
         check-compliance.sh reads this header to know which rule to enforce.
-      - DEPLOY_TARGET=openshift  → base images MUST be UBI 9 (ubi9/nodejs-20,
+      - DEPLOY_TARGET=openshift  → base images MUST be UBI 9 (ubi9/nodejs-22,
         ubi9/nginx-124, ubi9/python-311). alpine/slim is a HARD FAIL here.
       - DEPLOY_TARGET=code-engine → UBI 9 OR alpine/slim permitted. If alpine/slim,
         the BUILDPLATFORM build-stage pattern is REQUIRED (see Container Build
@@ -928,7 +928,7 @@ customModes:
       - backend: Dockerfile.backend, port 8000, env_file .env, DEMO_MODE=mock
 
       **Dockerfile.frontend:**
-      - Multi-stage: UBI9 nodejs-20 (build) → UBI9 nginx-120 (serve)
+      - Multi-stage: UBI9 nodejs-22 (build) → UBI9 nginx-120 (serve)
 
       **Dockerfile.backend:**
       - UBI9 python-311, pip install, uvicorn on 8000
@@ -948,7 +948,7 @@ customModes:
       # DEPLOY_TARGET: openshift
       # BUILD_ARCH: arm64   (set to amd64 if building on Intel/AMD/Linux)
       # Build stage runs on the builder's native arch — avoids QEMU/esbuild crashes on Apple Silicon
-      FROM --platform=$BUILDPLATFORM registry.access.redhat.com/ubi9/nodejs-20 AS builder
+      FROM --platform=$BUILDPLATFORM registry.access.redhat.com/ubi9/nodejs-22 AS builder
       WORKDIR /opt/app-root/src
       COPY package*.json ./
       RUN npm ci
@@ -970,7 +970,7 @@ customModes:
       # DEPLOY_TARGET: code-engine
       # BUILD_ARCH: arm64
       # Build on native platform to avoid QEMU/esbuild crashes on Apple Silicon
-      FROM --platform=$BUILDPLATFORM node:20-alpine AS builder
+      FROM --platform=$BUILDPLATFORM node:22-alpine AS builder
       WORKDIR /app
       COPY package*.json ./
       RUN npm ci
@@ -1194,7 +1194,7 @@ customModes:
       - [ ] No eval() or unsafe HTML
       - [ ] Dockerfiles carry a `# DEPLOY_TARGET:` and `# BUILD_ARCH:` header (mandatory questions answered; missing = HARD FAIL)
       - [ ] Base image matches deployment target:
-            • OpenShift  → UBI 9 only (ubi9/nodejs-20, ubi9/nginx-124, ubi9/python-311); alpine/slim = HARD FAIL
+            • OpenShift  → UBI 9 only (ubi9/nodejs-22, ubi9/nginx-124, ubi9/python-311); alpine/slim = HARD FAIL
             • Code Engine → UBI 9 OR alpine/slim; if alpine/slim, build stage uses --platform=$BUILDPLATFORM
             • Local only → any base; warn only
       - [ ] Architecture correct for target: if BUILD_ARCH=arm64 and target≠local, runtime FROM pinned to --platform=linux/amd64 AND README documents `docker/podman build --platform linux/amd64` (missing = HARD FAIL)

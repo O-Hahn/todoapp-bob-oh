@@ -1,0 +1,16 @@
+node_modules
+dist
+build
+.env
+.env.*
+.git
+.vscode
+.bob
+coverage
+*.log
+todo-admin-initial.txt
+admin-initial-password.txt
+server/dist
+server/node_modules
+web/dist
+web/node_modules
