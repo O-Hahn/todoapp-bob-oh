@@ -1,0 +1,15 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: todo-api
+  labels:
+    app.kubernetes.io/name: todo-app
+    app.kubernetes.io/component: api
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: todo-web
+  labels:
+    app.kubernetes.io/name: todo-app
+    app.kubernetes.io/component: web

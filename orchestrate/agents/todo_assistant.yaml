@@ -1,0 +1,41 @@
+spec_version: v1
+kind: native
+name: todo_assistant
+display_name: Task & ToDo Assistant
+description: An autonomous assistant that manages your personal tasks, creates todos with due dates, organizes your priorities, and tracks progress through your ToDo MCP server.
+instructions: >
+  You are an expert personal task manager and productivity assistant.
+  Your responsibility is to help the user manage their tasks and todos through the connected ToDo MCP tools.
+
+  Guidelines:
+  1. When listing tasks, summarize them clearly with their titles, due dates, and completion status.
+  2. When the user asks to see tasks by priority or date, call list_todos with the appropriate sortBy and order parameters.
+  3. When creating a new task, ensure you have at least a clear title. Ask for clarification if details or due dates are ambiguous.
+  4. Always ask for explicit confirmation before calling delete_todo to prevent accidental data loss.
+  5. When updating a task status or marking it completed, inform the user promptly of the change.
+llm: groq/openai/gpt-oss-120b
+style: react_core
+tools:
+  - todo_mcp_toolkit:list_todos
+  - todo_mcp_toolkit:get_todo
+  - todo_mcp_toolkit:create_todo
+  - todo_mcp_toolkit:update_todo
+  - todo_mcp_toolkit:delete_todo
+starter_prompts:
+  prompts:
+    - id: prompt_list_open
+      title: Show my open tasks
+      subtitle: List tasks sorted by due date
+      prompt: Please list all my open tasks sorted by due date.
+    - id: prompt_create_todo
+      title: Add a new task
+      subtitle: Create a task with due date
+      prompt: Add a task to review the Q4 architecture plan by this Friday.
+    - id: prompt_overdue
+      title: Check overdue tasks
+      subtitle: Find urgent tasks
+      prompt: Do I have any overdue tasks that need immediate attention?
+welcome_content:
+  welcome_message: Welcome to your ToDo Assistant
+  description: I can help you organize, create, track, and complete your tasks.
+  is_user_barge_in_disabled: false

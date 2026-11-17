@@ -1,0 +1,27 @@
+# DEPLOY_TARGET: openshift
+# BUILD_ARCH: arm64
+
+# Stage 1: Build
+FROM --platform=$BUILDPLATFORM registry.access.redhat.com/ubi9/nodejs-20:latest AS builder
+WORKDIR /opt/app-root/src
+
+COPY package*.json ./
+COPY web/package*.json ./web/
+COPY tsconfig.base.json ./
+
+RUN npm ci --workspace=web
+
+COPY web ./web
+
+RUN npm run build --workspace=web
+
+# Stage 2: Runtime
+FROM --platform=linux/amd64 registry.access.redhat.com/ubi9/nginx-124:latest
+
+COPY --from=builder /opt/app-root/src/web/dist /usr/share/nginx/html
+COPY web/nginx/nginx.conf /etc/nginx/nginx.conf
+
+USER 1001
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]

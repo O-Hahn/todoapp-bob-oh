@@ -1,0 +1,8 @@
+node_modules
+dist
+.env*
+*.local
+tests
+coverage
+todo-admin-initial.txt
+admin-initial-password.txt

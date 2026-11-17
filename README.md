@@ -1,0 +1,210 @@
+# IBM ToDo Web Application & watsonx Orchestrate MCP Service
+
+A modern, multi-user ToDo single-page web application built with the **IBM Carbon Design System (v11)** and TypeScript, backed by **IBM Cloudant / Apache CouchDB**, running on **Red Hat OpenShift**, and featuring a native **Model Context Protocol (MCP)** endpoint enabling autonomous **watsonx Orchestrate** AI agents to manage user tasks remotely.
+
+---
+
+## Key Features
+
+- **Frontend (`web/`):** React 18 + Vite + TypeScript with `@carbon/react`. Light (`white`) and Dark (`g100`) themes with OS preference detection, persisted in `localStorage`. Fully responsive across mobile, tablet, and desktop breakpoints.
+- **Backend (`server/`):** Node.js + TypeScript with Fastify. Dual REST API and Streamable HTTP MCP server (`/mcp`).
+- **Database:** External **IBM Cloudant NoSQL Database** (or Apache CouchDB). Sessions, users, API tokens, and todos stored with deterministic IDs and ownership isolation.
+- **Security & Auth:** Self-service registration, `argon2` password hashing, signed `httpOnly` SameSite session cookies, rate-limiting, and zero hardcoded secrets.
+- **Administration:** Default admin account bootstrap on first startup with a cryptographically secure random password delivered via Kubernetes Secret (`todo-admin-initial`) or a local mode `0600` file. Enforced initial password change. Operator statistics overview (users and task metrics without content exposure).
+- **Agent Integration:** Streamable HTTP `/mcp` transport authenticated with per-user Bearer tokens. Watsonx Orchestrate ADK agent definitions and toolkits ready for SaaS deployment.
+- **Container & OpenShift Hardening:** Multi-stage builds based on Red Hat UBI 9 minimal images, non-root user execution (`USER 1001`), read-only root filesystem, drop `ALL` capabilities, seccomp `RuntimeDefault`, and OpenShift `restricted-v2` SCC compliance.
+
+---
+
+## Project Structure
+
+```
+.
+├── Makefile                      # Standardized make targets (dev, build, test, deploy)
+├── compose.yaml                  # Local container stack (CouchDB + API + Web)
+├── package.json                  # Root npm workspace configuration
+├── tsconfig.base.json            # Base TypeScript configuration
+├── .env.example                  # Environment variable template
+├── Bob-Artefacts/
+│   └── todo-app-plan.md          # Architectural implementation plan
+├── server/                       # Fastify backend & MCP server
+│   ├── Containerfile             # Multi-stage UBI 9 Node.js image
+│   ├── package.json
+│   ├── src/
+│   │   ├── app.ts                # Fastify app configuration & plugins
+│   │   ├── config.ts             # Zod-validated environment config
+│   │   ├── auth/                 # Password hashing, crypto & auth plugin
+│   │   ├── db/                   # Cloudant & in-memory repository layer
+│   │   ├── mcp/                  # MCP Server & Streamable HTTP transport
+│   │   ├── routes/               # Auth, Todos, Tokens, Admin, MCP routes
+│   │   ├── schemas/              # Zod validation schemas
+│   │   ├── services/             # Auth, Todo, Token, and Admin services
+│   │   └── types/                # Domain types & interfaces
+│   └── tests/                    # Vitest unit & integration test suites
+├── web/                          # React + Carbon frontend
+│   ├── Containerfile             # Multi-stage UBI 9 Node -> nginx image
+│   ├── package.json
+│   ├── nginx/nginx.conf          # Hardened nginx SPA configuration
+│   ├── src/
+│   │   ├── App.tsx               # App shell & routing
+│   │   ├── api/                  # API client, todo, token & admin services
+│   │   ├── components/           # Carbon AppHeader, RouteGuard
+│   │   ├── context/              # ThemeContext (white/g100), AuthContext
+│   │   ├── pages/                # Todos, Settings, Admin, Login, Register, ChangePassword
+│   │   └── styles/index.scss     # Carbon v11 styles & responsive mixins
+│   └── tests/                    # Vitest & Testing Library component tests
+├── deploy/                       # OpenShift Kustomize deployment manifests
+│   ├── base/                     # Deployments, Services, Routes, RBAC, NetworkPolicy
+│   ├── build/                    # OpenShift ImageStreams and BuildConfigs
+│   ├── overlays/dev/             # Dev environment overlay
+│   ├── overlays/prod/            # Production environment overlay
+│   └── secret.example.yaml       # Template for Cloudant credentials Secret
+├── orchestrate/                  # watsonx Orchestrate ADK agent & toolkit
+│   ├── agents/                   # Native agent YAML (todo_assistant.yaml)
+│   ├── connections/              # Connection definition
+│   ├── toolkit.yaml              # Remote MCP toolkit definition
+│   └── deploy.sh                 # Orchestrate CLI import & deploy script
+└── scripts/
+    └── smoke.sh                  # Automated end-to-end smoke test suite
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js:** v20+ or v22+ LTS
+- **npm:** v10+
+- **Podman** or **Docker** (for container builds and local stack)
+- **OpenShift CLI (`oc`)** & **Kustomize** (for cluster deployment)
+
+### 1. Local Development (Fast In-Memory / Dev Server)
+
+1. **Install dependencies:**
+   ```bash
+   make install
+   ```
+
+2. **Start dev servers (API on `:8080`, Web on `:3000` with dev proxy):**
+   ```bash
+   make dev
+   ```
+
+3. **Open browser:** `http://127.0.0.1:3000`
+   - Self-register a new account at `/register`
+   - Create, organize, sort, and complete your tasks
+   - Switch themes with the Sun/Moon icon in the header
+
+### 2. Running Automated Tests
+
+Run the complete test suite across server and web workspaces:
+```bash
+make test
+```
+
+Run typechecking and linting:
+```bash
+make typecheck
+make lint
+```
+
+### 3. Local Container Stack (CouchDB + API + Web)
+
+To test the multi-container stack locally with CouchDB standing in for Cloudant:
+```bash
+# Start CouchDB, API, and Web containers
+make compose-up
+
+# Run automated smoke test against the local stack
+make smoke-local
+
+# Tear down local stack
+make compose-down
+```
+
+---
+
+## Administrator Account & Statistics
+
+On first startup, the server automatically bootstraps a default admin account with email set by `ADMIN_EMAIL` (default: `admin@example.com`) and a cryptographically secure random password.
+
+- **In OpenShift:** The password is written directly to a Kubernetes Secret named `todo-admin-initial` in the application namespace via the in-cluster API. The operator retrieves it using:
+  ```bash
+  oc get secret todo-admin-initial -o jsonpath='{.data.admin-initial-password}' | base64 -d
+  ```
+- **In Local Development:** The password is saved to `todo-admin-initial.txt` with mode `0600`.
+- **First Login:** The admin is forced to change their password on initial login (`/change-password`).
+- **Administration Dashboard (`/admin`):** Displays overall KPI tiles (Total Users, Total Tasks, Done, Open, Overdue) and a per-user activity breakdown. **No todo titles or descriptions are accessible to the administrator.**
+
+---
+
+## Model Context Protocol (MCP) & watsonx Orchestrate
+
+The application exposes a **Streamable HTTP MCP endpoint** at `/mcp` protected by per-user Bearer tokens.
+
+### 1. Generating an API Token
+1. Log into the ToDo Web App.
+2. Go to **Settings & Agent Tokens** in the header.
+3. Click **Generate New Token**, enter a label (e.g. `watsonx Orchestrate`), and copy the token.
+
+### 2. Deploying the watsonx Orchestrate Agent
+1. Activate your target Orchestrate environment:
+   ```bash
+   orchestrate env add -n my-saas -u https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/<INSTANCE_ID>
+   orchestrate env activate my-saas --api-key "$IBM_CLOUD_API_KEY"
+   ```
+2. Export your token and OpenShift Route URL:
+   ```bash
+   export TODO_MCP_API_TOKEN="todo_mcp_your_token_here"
+   export TODO_ROUTE_URL="https://todo-app-mcp-todo-app.apps.yourcluster.com/mcp"
+   ```
+3. Run the automated deployment script:
+   ```bash
+   bash orchestrate/deploy.sh
+   ```
+4. Chat with your agent:
+   ```bash
+   orchestrate chat ask -n todo_assistant "List my tasks sorted by due date"
+   ```
+
+### Available MCP Tools
+- `list_todos`: List tasks with sorting (`dueDate`, `createdAt`, `title`) and direction (`asc`, `desc`).
+- `get_todo`: Retrieve details for a specific todo by ID.
+- `create_todo`: Create a new task with title, optional description, and ISO due date.
+- `update_todo`: Update an existing task title, description, due date, or completed status.
+- `delete_todo`: Delete a task (agent instructions require confirmation before executing).
+
+---
+
+## OpenShift Deployment (Kustomize)
+
+### 1. Create Secret for Cloudant Credentials
+Create `todo-app-secret` in your target namespace with your external IBM Cloudant instance details:
+```bash
+oc create secret generic todo-app-secret \
+  --from-literal=CLOUDANT_URL="https://your-cloudant-instance.cloud.ibm.com" \
+  --from-literal=CLOUDANT_APIKEY="your-ibm-cloudant-iam-api-key" \
+  --from-literal=SESSION_SECRET="$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")" \
+  -n todo-app-dev
+```
+
+### 2. Deploy Dev Overlay
+```bash
+make deploy-dev
+```
+
+### 3. Verify Deployment
+```bash
+make smoke-openshift
+```
+
+---
+
+## Security Compliance Summary
+
+- **Container Images:** Red Hat UBI 9 minimal base images (`registry.access.redhat.com/ubi9/nodejs-20-minimal`, `registry.access.redhat.com/ubi9/nginx-124`).
+- **Privilege Separation:** Non-root execution (`USER 1001`), `readOnlyRootFilesystem: true`, `allowPrivilegeEscalation: false`, capabilities dropped (`ALL`).
+- **Network Security:** TLS 1.2+ edge termination on OpenShift Routes with HTTP-to-HTTPS redirect. No services bound to public interfaces. NetworkPolicies restrict ingress/egress.
+- **Credential Hygiene:** Secrets stored in Kubernetes Secrets and injected via `secretKeyRef`. Argon2 password hashing. No secrets logged in logs or committed to git.
+- **Input Validation:** Strict Zod schema validation on all incoming REST and MCP payloads.

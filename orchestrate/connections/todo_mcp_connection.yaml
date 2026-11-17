@@ -1,0 +1,9 @@
+spec_version: v1
+kind: connection
+name: todo_mcp_connection
+display_name: ToDo MCP API Token Connection
+description: Holds the Bearer API Token to authenticate against the remote ToDo MCP server on OpenShift
+connection_type: key_value
+auth_type: bearer
+parameters:
+  server_url: https://todo-app-mcp-todo-app.apps.cluster.example.com/mcp
