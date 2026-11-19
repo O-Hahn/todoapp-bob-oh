@@ -43,6 +43,27 @@
       "url": "https://ibm-2e3153bf.main-kill-isr.mintlify.me/mcp",
       "disabled": false,
       "alwaysAllow": []
+    },
+    "watsonx-orchestrate-adk-docs": {
+      "command": "uvx",
+      "args": [
+        "mcp-proxy",
+        "--transport",
+        "streamablehttp",
+        "https://developer.watson-orchestrate.ibm.com/mcp"
+      ],
+      "timeout": 120000
+    },
+    "watsonx-orchestrate-adk": {
+      "command": "uvx",
+      "args": [
+        "ibm-watsonx-orchestrate-mcp-server"
+      ],
+      "env": {
+        "WXO_MCP_WORKING_DIRECTORY": "/Users/olafhahn/Git/ToDoApp-Bob",
+        "WXO_MCP_DEBUG": ""
+      },
+      "timeout": 120000
     }
   }
 }

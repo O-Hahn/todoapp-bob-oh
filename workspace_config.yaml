@@ -1,0 +1,7 @@
+folder_paths:
+  agents: ./orchestrate/agents
+  tools: ./orchestrate/tools
+  connections: ./orchestrate/connections
+  knowledge_bases: ./orchestrate/knowledge-bases
+  toolkits: ./orchestrate/toolkits
+  models: ./orchestrate/models

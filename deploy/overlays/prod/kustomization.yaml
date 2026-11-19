@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: todo-app-prod
+namespace: olaf-hahn-at-dev
 
 resources:
   - ../../base
@@ -15,10 +15,10 @@ configMapGenerator:
 
 images:
   - name: todo-api
-    newName: image-registry.openshift-image-registry.svc:5000/todo-app-prod/todo-api
+    newName: image-registry.openshift-image-registry.svc:5000/olaf-hahn-at-dev/todo-api
     newTag: v1.0.0
   - name: todo-web
-    newName: image-registry.openshift-image-registry.svc:5000/todo-app-prod/todo-web
+    newName: image-registry.openshift-image-registry.svc:5000/olaf-hahn-at-dev/todo-web
     newTag: v1.0.0
 
 patches:

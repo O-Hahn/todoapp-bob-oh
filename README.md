@@ -186,7 +186,7 @@ oc create secret generic todo-app-secret \
   --from-literal=CLOUDANT_URL="https://your-cloudant-instance.cloud.ibm.com" \
   --from-literal=CLOUDANT_APIKEY="your-ibm-cloudant-iam-api-key" \
   --from-literal=SESSION_SECRET="$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")" \
-  -n todo-app-dev
+  -n olaf-hahn-at-dev
 ```
 
 ### 2. Deploy Dev Overlay

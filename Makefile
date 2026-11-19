@@ -49,16 +49,16 @@ smoke-local:
 deploy-dev:
 	@if [ ! -f .env.openshift ]; then \
 		echo "Creating secret from .env.example..."; \
-		oc create secret generic todo-app-secret --from-env-file=.env.example --dry-run=client -o yaml | oc apply -f - -n todo-app-dev || true; \
+		oc create secret generic todo-app-secret --from-env-file=.env.example --dry-run=client -o yaml | oc apply -f - -n olaf-hahn-at-dev || true; \
 	else \
-		oc create secret generic todo-app-secret --from-env-file=.env.openshift --dry-run=client -o yaml | oc apply -f - -n todo-app-dev; \
+		oc create secret generic todo-app-secret --from-env-file=.env.openshift --dry-run=client -o yaml | oc apply -f - -n olaf-hahn-at-dev; \
 	fi
 	oc apply -k deploy/overlays/dev
-	oc start-build todo-api-build --from-dir=. -n todo-app-dev --follow
-	oc start-build todo-web-build --from-dir=. -n todo-app-dev --follow
+	oc start-build todo-api-build --from-dir=. -n olaf-hahn-at-dev --follow
+	oc start-build todo-web-build --from-dir=. -n olaf-hahn-at-dev --follow
 
 smoke-openshift:
-	@ROUTE_HOST=$$(oc get route todo-app-web -n todo-app-dev -o jsonpath='{.spec.host}'); \
+	@ROUTE_HOST=$$(oc get route todo-app-web -n olaf-hahn-at-dev -o jsonpath='{.spec.host}'); \
 	bash scripts/smoke.sh "https://$$ROUTE_HOST"
 
 undeploy-dev:

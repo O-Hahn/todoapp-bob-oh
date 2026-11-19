@@ -1,3 +1,4 @@
 node_modules
 todo-admin-initial.txt
 admin-initial-password.txt
+.env.opoenshift
