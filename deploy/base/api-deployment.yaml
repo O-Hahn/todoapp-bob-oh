@@ -17,6 +17,14 @@ spec:
         app.kubernetes.io/name: todo-app
         app.kubernetes.io/component: api
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: todo-app
+              app.kubernetes.io/component: api
       serviceAccountName: todo-app-api
       securityContext:
         runAsNonRoot: true

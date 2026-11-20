@@ -154,10 +154,9 @@ The application exposes a **Streamable HTTP MCP endpoint** at `/mcp` protected b
    orchestrate env add -n my-saas -u https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/<INSTANCE_ID>
    orchestrate env activate my-saas --api-key "$IBM_CLOUD_API_KEY"
    ```
-2. Export your token and OpenShift Route URL:
+2. Export your token (the MCP Route URL is set in `orchestrate/toolkit.yaml` and `orchestrate/connections/todo_mcp_connection.yaml`):
    ```bash
    export TODO_MCP_API_TOKEN="todo_mcp_your_token_here"
-   export TODO_ROUTE_URL="https://todo-app-mcp-todo-app.apps.yourcluster.com/mcp"
    ```
 3. Run the automated deployment script:
    ```bash

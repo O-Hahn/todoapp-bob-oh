@@ -18,12 +18,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
   if (loading) {
     return (
       <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '60vh',
-        }}
+        className="loading-center"
       >
         <Loading description="Loading application..." withOverlay={false} />
       </div>

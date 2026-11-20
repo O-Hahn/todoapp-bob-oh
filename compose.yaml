@@ -13,6 +13,11 @@ services:
       retries: 10
 
   api:
+    # nginx in the web image proxies to http://todo-api:8080 (the in-cluster Service name)
+    networks:
+      default:
+        aliases:
+          - todo-api
     build:
       context: .
       dockerfile: server/Containerfile

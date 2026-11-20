@@ -216,22 +216,13 @@ export const TodosPage: React.FC = () => {
     title: (
       <div>
         <div
-          style={{
-            fontWeight: 600,
-            textDecoration: todo.completed ? 'line-through' : 'none',
-            opacity: todo.completed ? 0.7 : 1,
-          }}
+          className={`table-todo-title ${todo.completed ? 'completed' : ''}`}
         >
           {todo.title}
         </div>
         {todo.description && (
           <div
-            style={{
-              fontSize: '0.8125rem',
-              color: 'var(--cds-text-secondary)',
-              marginTop: '0.25rem',
-              whiteSpace: 'pre-wrap',
-            }}
+            className="meta-text meta-text--pre"
           >
             {todo.description}
           </div>
@@ -251,17 +242,17 @@ export const TodosPage: React.FC = () => {
             {isOverdue(todo) && !todo.completed ? ' (Overdue)' : ''}
           </Tag>
         ) : (
-          <span style={{ color: 'var(--cds-text-secondary)' }}>No due date</span>
+          <span className="text-secondary">No due date</span>
         )}
       </div>
     ),
     createdAt: (
-      <span style={{ fontSize: '0.8125rem' }}>
+      <span className="text-xs">
         {formatDate(todo.createdAt)}
       </span>
     ),
     actions: (
-      <div style={{ display: 'flex', gap: '0.25rem' }}>
+      <div className="row-gap-1">
         <Button
           kind="ghost"
           size="sm"
@@ -287,26 +278,19 @@ export const TodosPage: React.FC = () => {
   return (
     <div className="app-content">
       <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-        }}
+        className="row-between mb-6"
       >
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 600, margin: 0 }}>
+          <h1 className="page-title">
             My Tasks
           </h1>
-          <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem' }}>
+          <p className="page-subtitle">
             {todos.filter((t) => !t.completed).length} open tasks ·{' '}
             {todos.filter((t) => t.completed).length} completed
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div className="row-actions">
           <Button
             renderIcon={Add}
             onClick={openCreateModal}
@@ -323,25 +307,16 @@ export const TodosPage: React.FC = () => {
           title="Error"
           subtitle={error}
           onCloseButtonClick={() => setError(null)}
-          style={{ marginBottom: '1rem' }}
+          className="mb-4"
         />
       )}
 
       {/* Sort controls */}
       <div
-        style={{
-          display: 'flex',
-          gap: '1rem',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          marginBottom: '1.5rem',
-          background: 'var(--cds-layer-01)',
-          padding: '0.75rem 1rem',
-          borderRadius: '4px',
-        }}
+        className="sort-bar"
       >
-        <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Sort by:</span>
-        <div style={{ width: '180px' }}>
+        <span className="sort-label">Sort by:</span>
+        <div className="w-180">
           <Select
             id="sort-by"
             labelText=""
@@ -357,7 +332,7 @@ export const TodosPage: React.FC = () => {
           </Select>
         </div>
 
-        <div style={{ width: '160px' }}>
+        <div className="w-160">
           <Select
             id="sort-order"
             labelText=""
@@ -376,12 +351,12 @@ export const TodosPage: React.FC = () => {
       {loading ? (
         <DataTableSkeleton headers={headers} rowCount={4} />
       ) : todos.length === 0 ? (
-        <Tile style={{ textAlign: 'center', padding: '3rem 1.5rem' }}>
-          <CheckmarkOutline size={48} style={{ color: 'var(--cds-support-success)' }} />
-          <h3 style={{ marginTop: '1rem', fontSize: '1.25rem', fontWeight: 600 }}>
+        <Tile className="empty-tile empty-tile--lg">
+          <CheckmarkOutline size={48} className="icon-success" />
+          <h3 className="empty-title empty-title--lg">
             No tasks found
           </h3>
-          <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.5rem', marginBottom: '1.5rem' }}>
+          <p className="empty-text empty-text--lg">
             You have no todos matching this filter. Create one to get started!
           </p>
           <Button renderIcon={Add} onClick={openCreateModal}>
@@ -391,7 +366,7 @@ export const TodosPage: React.FC = () => {
       ) : (
         <>
           {/* Desktop Table View (hidden on small screens) */}
-          <div className="desktop-table-view" style={{ display: 'none' }}>
+          <div className="desktop-table-view desktop-table-view-hidden">
             <TableContainer title="Tasks List">
               <TableToolbar>
                 <TableToolbarContent>
@@ -433,23 +408,18 @@ export const TodosPage: React.FC = () => {
                   className={`todo-card ${todo.completed ? 'completed' : ''} ${overdue ? 'overdue' : ''}`}
                 >
                   <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      justifyContent: 'space-between',
-                      gap: '0.75rem',
-                    }}
+                    className="card-row"
                   >
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', flex: 1 }}>
+                    <div className="card-main">
                       <Checkbox
                         id={`card-check-${todo._id}`}
                         labelText=""
                         aria-label={`Mark ${todo.title} as ${todo.completed ? 'open' : 'completed'}`}
                         checked={todo.completed}
                         onChange={() => handleToggleComplete(todo)}
-                        style={{ marginTop: '2px' }}
+                        className="mt-px"
                       />
-                      <div style={{ flex: 1 }}>
+                      <div className="flex-1">
                         <div
                           className={`todo-title ${todo.completed ? 'completed-text' : ''}`}
                         >
@@ -477,14 +447,14 @@ export const TodosPage: React.FC = () => {
                               {overdue && !todo.completed ? ' (Overdue)' : ''}
                             </Tag>
                           )}
-                          <span style={{ color: 'var(--cds-text-secondary)' }}>
+                          <span className="text-secondary">
                             Created: {formatDate(todo.createdAt)}
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '0.25rem' }}>
+                    <div className="row-gap-1">
                       <Button
                         kind="ghost"
                         size="sm"
@@ -522,7 +492,7 @@ export const TodosPage: React.FC = () => {
         onRequestClose={() => setIsModalOpen(false)}
         onRequestSubmit={handleModalSubmit}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', paddingTop: '1rem' }}>
+        <div className="modal-body-stack modal-body-stack--lg">
           {formError && (
             <InlineNotification
               kind="error"
@@ -573,7 +543,7 @@ export const TodosPage: React.FC = () => {
         onRequestClose={() => setIsDeleteModalOpen(false)}
         onRequestSubmit={confirmDelete}
       >
-        <p style={{ paddingTop: '1rem' }}>
+        <p className="pt-4">
           Are you sure you want to delete <strong>&quot;{deleteTarget?.title}&quot;</strong>? This
           action cannot be undone.
         </p>

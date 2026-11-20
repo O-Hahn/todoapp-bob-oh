@@ -61,12 +61,12 @@ export const ChangePasswordPage: React.FC = () => {
         <Form onSubmit={handleSubmit}>
           <Stack gap={6}>
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: 600, margin: 0 }}>
+              <h2 className="auth-title">
                 {user?.mustChangePassword
                   ? 'Initial Password Change Required'
                   : 'Change Password'}
               </h2>
-              <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem' }}>
+              <p className="page-subtitle">
                 {user?.mustChangePassword
                   ? 'Please set a secure personal password to continue'
                   : 'Update your account password'}
@@ -125,7 +125,7 @@ export const ChangePasswordPage: React.FC = () => {
               type="submit"
               renderIcon={Password}
               disabled={loading}
-              style={{ width: '100%', maxWidth: 'none' }}
+              className="btn-full"
             >
               {loading ? 'Updating Password...' : 'Change Password'}
             </Button>

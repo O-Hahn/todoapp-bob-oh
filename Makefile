@@ -95,11 +95,10 @@ quay-pull-secret:
 
 deploy-dev:
 	@if [ ! -f .env.openshift ]; then \
-		echo "Creating secret from .env.example..."; \
-		oc create secret generic todo-app-secret --from-env-file=.env.example --dry-run=client -o yaml | oc apply -f - -n olaf-hahn-at-dev || true; \
-	else \
-		oc create secret generic todo-app-secret --from-env-file=.env.openshift --dry-run=client -o yaml | oc apply -f - -n olaf-hahn-at-dev; \
+		echo "ERROR: .env.openshift not found. Copy .env.example to .env.openshift and fill in real Cloudant and session values."; \
+		exit 1; \
 	fi
+	oc create secret generic todo-app-secret --from-env-file=.env.openshift --dry-run=client -o yaml | oc apply -f - -n olaf-hahn-at-dev
 	oc apply -k deploy/overlays/dev
 
 smoke-openshift:

@@ -60,6 +60,32 @@ export async function buildApp(
     timeWindow: '1 minute',
   });
 
+  // CSRF defence for cookie-authenticated, state-changing requests: browsers always
+  // send Origin on cross-site POST/PUT/PATCH/DELETE, so a mismatching Origin is rejected.
+  // Requests without Origin (curl, server-to-server) are not browser CSRF vectors.
+  app.addHook('onRequest', async (request, reply) => {
+    if (['GET', 'HEAD', 'OPTIONS'].includes(request.method)) return;
+    if (!request.url.startsWith('/api/')) return;
+    const origin = request.headers.origin;
+    if (!origin) return;
+    let originHost: string | null = null;
+    try {
+      originHost = new URL(origin).host;
+    } catch {
+      originHost = null;
+    }
+    const forwardedHost = request.headers['x-forwarded-host'];
+    const requestHost =
+      (Array.isArray(forwardedHost) ? forwardedHost[0] : forwardedHost) ??
+      request.headers.host;
+    if (!originHost || originHost !== requestHost) {
+      return reply.status(403).send({
+        error: 'FORBIDDEN',
+        message: 'Cross-origin request rejected',
+      });
+    }
+  });
+
   // Instantiate services
   const authService = new AuthService(repo);
   const todoService = new TodoService(repo);

@@ -131,10 +131,10 @@ export const SettingsPage: React.FC = () => {
     <div className="app-content">
       <Stack gap={7}>
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 600, margin: 0 }}>
+          <h1 className="page-title">
             Settings &amp; Agent Tokens
           </h1>
-          <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem' }}>
+          <p className="page-subtitle">
             Manage your account security and MCP tokens for watsonx Orchestrate AI agents
           </p>
         </div>
@@ -151,19 +151,13 @@ export const SettingsPage: React.FC = () => {
         {/* Profile Card */}
         <Tile>
           <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: '1rem',
-            }}
+            className="row-between"
           >
             <div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, margin: 0 }}>
+              <h3 className="section-title-lg">
                 Account Profile
               </h3>
-              <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem' }}>
+              <p className="page-subtitle">
                 Signed in as <strong>{user?.email}</strong> · Role:{' '}
                 <Tag type={user?.role === 'admin' ? 'purple' : 'blue'}>
                   {user?.role}
@@ -185,20 +179,13 @@ export const SettingsPage: React.FC = () => {
         {/* API Tokens Section */}
         <div>
           <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: '1rem',
-              marginBottom: '1rem',
-            }}
+            className="row-between mb-4"
           >
             <div>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 600, margin: 0 }}>
+              <h2 className="section-title-xl">
                 MCP API Tokens
               </h2>
-              <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem' }}>
+              <p className="page-subtitle">
                 Tokens grant your personal watsonx Orchestrate agent remote access to your tasks
               </p>
             </div>
@@ -219,12 +206,12 @@ export const SettingsPage: React.FC = () => {
           {loading ? (
             <DataTableSkeleton headers={[{ key: 'l', header: 'Tokens' }]} />
           ) : tokens.length === 0 ? (
-            <Tile style={{ textAlign: 'center', padding: '2.5rem 1.5rem' }}>
-              <Bot size={40} style={{ color: 'var(--cds-icon-secondary)' }} />
-              <h4 style={{ marginTop: '0.75rem', fontSize: '1.125rem', fontWeight: 600 }}>
+            <Tile className="empty-tile empty-tile--md">
+              <Bot size={40} className="icon-secondary" />
+              <h4 className="empty-title empty-title--md">
                 No API tokens generated yet
               </h4>
-              <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem', marginBottom: '1.25rem' }}>
+              <p className="empty-text empty-text--md">
                 Generate a token to let your watsonx Orchestrate agent list, create, and manage your todos.
               </p>
               <Button
@@ -242,24 +229,14 @@ export const SettingsPage: React.FC = () => {
               {tokens.map((token) => (
                 <Tile key={token.id}>
                   <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      flexWrap: 'wrap',
-                      gap: '1rem',
-                    }}
+                    className="row-between"
                   >
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: '1.125rem' }}>
+                      <div className="token-label">
                         {token.label}
                       </div>
                       <div
-                        style={{
-                          fontSize: '0.8125rem',
-                          color: 'var(--cds-text-secondary)',
-                          marginTop: '0.25rem',
-                        }}
+                        className="meta-text"
                       >
                         Created: {formatDate(token.createdAt)} · Last Used:{' '}
                         {formatDate(token.lastUsedAt)}
@@ -283,11 +260,11 @@ export const SettingsPage: React.FC = () => {
         </div>
 
         {/* Integration Instructions */}
-        <Tile style={{ background: 'var(--cds-layer-01)' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: 600, margin: 0, marginBottom: '0.5rem' }}>
+        <Tile className="bg-layer">
+          <h3 className="section-title-md">
             How to Connect watsonx Orchestrate
           </h3>
-          <p style={{ fontSize: '0.875rem', color: 'var(--cds-text-secondary)', marginBottom: '1rem' }}>
+          <p className="help-text help-text--mb">
             Configure your remote MCP toolkit in watsonx Orchestrate using the Streamable HTTP endpoint:
           </p>
           <CodeSnippet type="multi" feedback="Copied configuration snippet">
@@ -313,8 +290,8 @@ headers:
         onRequestClose={() => setIsModalOpen(false)}
         onRequestSubmit={handleCreateToken}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingTop: '1rem' }}>
-          <p style={{ fontSize: '0.875rem', color: 'var(--cds-text-secondary)' }}>
+        <div className="modal-body-stack">
+          <p className="help-text">
             Enter a descriptive label for where this token will be used (e.g. &quot;watsonx Orchestrate SaaS Agent&quot;).
           </p>
 
@@ -348,7 +325,7 @@ headers:
         onRequestClose={() => setCreatedToken(null)}
         onRequestSubmit={() => setCreatedToken(null)}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingTop: '1rem' }}>
+        <div className="modal-body-stack">
           <InlineNotification
             kind="warning"
             title="Copy your token now"
@@ -358,7 +335,7 @@ headers:
           />
 
           <div>
-            <div style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}>
+            <div className="field-label">
               Label: {createdToken?.label}
             </div>
             <CodeSnippet type="single" feedback="Copied!">
@@ -370,7 +347,7 @@ headers:
             kind="primary"
             renderIcon={copied ? Checkmark : Copy}
             onClick={() => createdToken && copyToClipboard(createdToken.token)}
-            style={{ marginTop: '0.5rem' }}
+            className="mt-2"
           >
             {copied ? 'Copied to Clipboard!' : 'Copy Token'}
           </Button>
@@ -388,7 +365,7 @@ headers:
         onRequestClose={() => setIsRevokeModalOpen(false)}
         onRequestSubmit={confirmRevoke}
       >
-        <p style={{ paddingTop: '1rem' }}>
+        <p className="pt-4">
           Are you sure you want to revoke the token <strong>&quot;{revokeTarget?.label}&quot;</strong>? Any agents or tools currently using this token will lose access immediately.
         </p>
       </Modal>

@@ -108,4 +108,36 @@ describe('API Tokens & MCP Streamable HTTP', () => {
     expect(authUser).toBeDefined();
     expect(authUser?.email).toBe('agentuser@example.com');
   });
+
+  it('serves tools/list and tools/call over Streamable HTTP with zod schemas', async () => {
+    const created = await tokenService.createToken(userId, 'Agent Test');
+    const headers = {
+      authorization: `Bearer ${created.token}`,
+      'content-type': 'application/json',
+      accept: 'application/json, text/event-stream',
+    };
+
+    const list = await app.inject({
+      method: 'POST',
+      url: '/mcp',
+      headers,
+      payload: { jsonrpc: '2.0', id: 1, method: 'tools/list' },
+    });
+    expect(list.statusCode).toBe(200);
+    expect(list.body).toContain('create_todo');
+
+    const call = await app.inject({
+      method: 'POST',
+      url: '/mcp',
+      headers,
+      payload: {
+        jsonrpc: '2.0',
+        id: 2,
+        method: 'tools/call',
+        params: { name: 'create_todo', arguments: { title: 'From MCP' } },
+      },
+    });
+    expect(call.statusCode).toBe(200);
+    expect(call.body).toContain('From MCP');
+  });
 });

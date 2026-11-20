@@ -25,8 +25,8 @@ const configSchema = z.object({
   SESSION_SECRET: z.string().min(16).default('development_insecure_session_secret_32_bytes_long'),
   COOKIE_SECURE: z
     .string()
-    .transform((val) => val === 'true')
-    .default('false'),
+    .default('false')
+    .transform((val) => val === 'true'),
 
   // Administration
   ADMIN_EMAIL: z.string().email().default('admin@example.com'),

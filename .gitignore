@@ -1,4 +1,12 @@
 node_modules
+dist
+coverage
+.env
+.env.*
+!.env.example
+.venv
+venv
+*.log
 todo-admin-initial.txt
 admin-initial-password.txt
 .env.openshift

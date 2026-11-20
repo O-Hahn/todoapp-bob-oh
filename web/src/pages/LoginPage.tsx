@@ -51,10 +51,10 @@ export const LoginPage: React.FC = () => {
         <Form onSubmit={handleSubmit}>
           <Stack gap={6}>
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: 600, margin: 0 }}>
+              <h2 className="auth-title">
                 World best ToDo App - Welcome Back
               </h2>
-              <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem' }}>
+              <p className="page-subtitle">
                 Sign in to manage your tasks 
               </p>
             </div>
@@ -93,14 +93,14 @@ export const LoginPage: React.FC = () => {
               type="submit"
               renderIcon={LoginIcon}
               disabled={loading}
-              style={{ width: '100%', maxWidth: 'none' }}
+              className="btn-full"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
 
-            <div style={{ textAlign: 'center', fontSize: '0.875rem' }}>
+            <div className="auth-footer">
               Don&apos;t have an account?{' '}
-              <Link to="/register" style={{ color: 'var(--cds-link-primary)' }}>
+              <Link to="/register" className="link-primary">
                 Create an account
               </Link>
             </div>

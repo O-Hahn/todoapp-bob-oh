@@ -44,11 +44,11 @@ export const AdminPage: React.FC = () => {
 
   return (
     <div className="app-content">
-      <div style={{ marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 600, margin: 0 }}>
+      <div className="mb-6">
+        <h1 className="page-title">
           Operator Administration
         </h1>
-        <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem' }}>
+        <p className="page-subtitle">
           Read-only system overview and per-user activity statistics. Todo contents are strictly protected.
         </p>
       </div>
@@ -59,7 +59,7 @@ export const AdminPage: React.FC = () => {
           title="Error"
           subtitle={error}
           onCloseButtonClick={() => setError(null)}
-          style={{ marginBottom: '1.5rem' }}
+          className="mb-6"
         />
       )}
 
@@ -78,51 +78,51 @@ export const AdminPage: React.FC = () => {
           {/* Summary KPI Tiles */}
           <div className="stats-grid">
             <Tile>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--cds-text-secondary)' }}>
+              <div className="stat-label">
                 <UserMultiple size={20} />
-                <span style={{ fontSize: '0.875rem' }}>Total Users</span>
+                <span className="text-sm">Total Users</span>
               </div>
-              <div style={{ fontSize: '2rem', fontWeight: 600, marginTop: '0.5rem' }}>
+              <div className="stat-value">
                 {stats?.totalUsers || 0}
               </div>
             </Tile>
 
             <Tile>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--cds-text-secondary)' }}>
+              <div className="stat-label">
                 <Task size={20} />
-                <span style={{ fontSize: '0.875rem' }}>Total Tasks</span>
+                <span className="text-sm">Total Tasks</span>
               </div>
-              <div style={{ fontSize: '2rem', fontWeight: 600, marginTop: '0.5rem' }}>
+              <div className="stat-value">
                 {totalTodos}
               </div>
             </Tile>
 
             <Tile>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--cds-support-success)' }}>
+              <div className="stat-label stat-label--success">
                 <CheckmarkOutline size={20} />
-                <span style={{ fontSize: '0.875rem' }}>Done Tasks</span>
+                <span className="text-sm">Done Tasks</span>
               </div>
-              <div style={{ fontSize: '2rem', fontWeight: 600, marginTop: '0.5rem' }}>
+              <div className="stat-value">
                 {totalDone}
               </div>
             </Tile>
 
             <Tile>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--cds-link-primary)' }}>
+              <div className="stat-label stat-label--info">
                 <WarningAlt size={20} />
-                <span style={{ fontSize: '0.875rem' }}>Open Tasks</span>
+                <span className="text-sm">Open Tasks</span>
               </div>
-              <div style={{ fontSize: '2rem', fontWeight: 600, marginTop: '0.5rem' }}>
+              <div className="stat-value">
                 {totalOpen}
               </div>
             </Tile>
 
             <Tile>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--cds-support-error)' }}>
+              <div className="stat-label stat-label--error">
                 <Alarm size={20} />
-                <span style={{ fontSize: '0.875rem' }}>Overdue Tasks</span>
+                <span className="text-sm">Overdue Tasks</span>
               </div>
-              <div style={{ fontSize: '2rem', fontWeight: 600, marginTop: '0.5rem' }}>
+              <div className="stat-value">
                 {totalOverdue}
               </div>
             </Tile>
@@ -143,14 +143,14 @@ export const AdminPage: React.FC = () => {
               <TableBody>
                 {stats?.users.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} style={{ textAlign: 'center' }}>
+                    <TableCell colSpan={5} className="text-center">
                       No regular users registered yet
                     </TableCell>
                   </TableRow>
                 ) : (
                   stats?.users.map((user) => (
                     <TableRow key={user.userId}>
-                      <TableCell style={{ fontWeight: 600 }}>{user.email}</TableCell>
+                      <TableCell className="font-semibold">{user.email}</TableCell>
                       <TableCell>{user.total}</TableCell>
                       <TableCell>
                         <Tag type="green">{user.done}</Tag>

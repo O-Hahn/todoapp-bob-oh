@@ -66,7 +66,10 @@ spec:
           port: 5353
         - protocol: TCP
           port: 5353
-    # Allow external HTTPS for Cloudant & K8s API (443 via service, 6443 after DNAT)
+    # Allow external HTTPS for Cloudant & K8s API (443 via service, 6443 after DNAT).
+    # Known limitation: NetworkPolicy cannot match DNS names, and the Cloudant IPs are
+    # not stable, so the destination is any IP but restricted to these two ports.
+    # Tighten with an EgressFirewall / egress IP allowlist if the cluster supports it.
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0

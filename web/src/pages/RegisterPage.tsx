@@ -58,10 +58,10 @@ export const RegisterPage: React.FC = () => {
         <Form onSubmit={handleSubmit}>
           <Stack gap={6}>
             <div>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: 600, margin: 0 }}>
+              <h2 className="auth-title">
                 Create Account
               </h2>
-              <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem' }}>
+              <p className="page-subtitle">
                 Self-service registration for your personal ToDo workspace
               </p>
             </div>
@@ -109,14 +109,14 @@ export const RegisterPage: React.FC = () => {
               type="submit"
               renderIcon={UserFollow}
               disabled={loading}
-              style={{ width: '100%', maxWidth: 'none' }}
+              className="btn-full"
             >
               {loading ? 'Creating Account...' : 'Register'}
             </Button>
 
-            <div style={{ textAlign: 'center', fontSize: '0.875rem' }}>
+            <div className="auth-footer">
               Already have an account?{' '}
-              <Link to="/login" style={{ color: 'var(--cds-link-primary)' }}>
+              <Link to="/login" className="link-primary">
                 Sign In
               </Link>
             </div>

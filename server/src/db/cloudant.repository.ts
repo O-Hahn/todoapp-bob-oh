@@ -350,5 +350,7 @@ export function createCloudantClient(cfg: Config): CloudantV1 {
   return CloudantV1.newInstance({
     authenticator,
     serviceUrl: cfg.CLOUDANT_URL,
+    // Fail fast instead of hanging requests when Cloudant is unreachable
+    timeout: 15000,
   });
 }

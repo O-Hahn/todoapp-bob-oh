@@ -113,3 +113,302 @@ body,
   gap: 1rem;
   margin-bottom: 2rem;
 }
+
+// Utility & page classes (replace former inline styles)
+.page-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.page-subtitle {
+  color: var(--cds-text-secondary);
+  margin-top: 0.25rem;
+}
+
+.auth-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.auth-footer {
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.btn-full {
+  width: 100%;
+  max-width: none;
+}
+
+.link-primary {
+  color: var(--cds-link-primary);
+}
+
+.main-content {
+  margin-top: 48px;
+  flex: 1;
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.row-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.row-gap-1 {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.card-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.card-main {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.modal-body-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1rem;
+
+  &--lg {
+    gap: 1.25rem;
+  }
+}
+
+.sort-bar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  background: var(--cds-layer-01);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+}
+
+.sort-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.w-160 {
+  width: 160px;
+}
+
+.w-180 {
+  width: 180px;
+}
+
+.desktop-table-view-hidden {
+  display: none;
+}
+
+.table-todo-title {
+  font-weight: 600;
+
+  &.completed {
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+}
+
+// Admin statistics
+.stat-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cds-text-secondary);
+
+  &--success {
+    color: var(--cds-support-success);
+  }
+
+  &--info {
+    color: var(--cds-link-primary);
+  }
+
+  &--error {
+    color: var(--cds-support-error);
+  }
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+// Settings page
+.section-title-xl {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.section-title-lg {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.section-title-md {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.token-label {
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.field-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.meta-text {
+  font-size: 0.8125rem;
+  color: var(--cds-text-secondary);
+  margin-top: 0.25rem;
+
+  &--pre {
+    white-space: pre-wrap;
+  }
+}
+
+.help-text {
+  font-size: 0.875rem;
+  color: var(--cds-text-secondary);
+
+  &--mb {
+    margin-bottom: 1rem;
+  }
+}
+
+.bg-layer {
+  background: var(--cds-layer-01);
+}
+
+// Empty states
+.empty-tile {
+  text-align: center;
+
+  &--md {
+    padding: 2.5rem 1.5rem;
+  }
+
+  &--lg {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.empty-title {
+  font-weight: 600;
+
+  &--md {
+    margin-top: 0.75rem;
+    font-size: 1.125rem;
+  }
+
+  &--lg {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+  }
+}
+
+.empty-text {
+  color: var(--cds-text-secondary);
+
+  &--md {
+    margin-top: 0.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  &--lg {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// Generic helpers
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-xs {
+  font-size: 0.8125rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-secondary {
+  color: var(--cds-text-secondary);
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.icon-secondary {
+  color: var(--cds-icon-secondary);
+}
+
+.icon-success {
+  color: var(--cds-support-success);
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-px {
+  margin-top: 2px;
+}
+
+.pt-4 {
+  padding-top: 1rem;
+}

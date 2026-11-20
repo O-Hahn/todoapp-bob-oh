@@ -18,7 +18,7 @@ export const App: React.FC = () => {
         <AuthProvider>
           <div className="app-container">
             <AppHeader />
-            <main style={{ marginTop: '48px', flex: 1 }}>
+            <main className="main-content">
               <Routes>
                 {/* Public Auth Routes */}
                 <Route path="/login" element={<LoginPage />} />
