@@ -9,7 +9,7 @@ This directory contains the Agent Development Kit (ADK) artifacts to connect an 
    orchestrate env add -n my-saas -u https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/<INSTANCE_ID>
    orchestrate env activate my-saas --api-key "$IBM_CLOUD_API_KEY"
    ```
-2. Your OpenShift ToDo App `/mcp` Route URL (e.g. `https://todo-app-mcp-todo-app.apps.mycluster.example.com/mcp`).
+2. Your OpenShift ToDo App `/mcp` Route URL (e.g. `https://<your-route>/mcp`).
 3. An API Token created from your ToDo App user interface:
    - Log into the ToDo Web App.
    - Go to **Settings & Agent Tokens**.
@@ -17,10 +17,9 @@ This directory contains the Agent Development Kit (ADK) artifacts to connect an 
 
 ## Deployment Steps
 
-1. Export your API token and Route URL:
+1. Export your API token (the route URL is set in `toolkit.yaml` and `connections/todo_mcp_connection.yaml`):
    ```bash
    export TODO_MCP_API_TOKEN="todo_mcp_your_generated_token_here"
-   export TODO_ROUTE_URL="https://todo-app-mcp-todo-app.apps.mycluster.example.com/mcp"
    ```
 
 2. Run the deployment script:

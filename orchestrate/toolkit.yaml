@@ -1,11 +1,10 @@
 spec_version: v1
 kind: mcp
 name: todo_mcp_toolkit
-display_name: ToDo Application MCP Toolkit
 description: Remote Streamable HTTP MCP toolkit connecting to the ToDo App on OpenShift for todo management
 transport: streamable_http
-server_url: https://todo-app-mcp-todo-app.apps.cluster.example.com/mcp
+url: https://todo-app-mcp-olaf-hahn-at-dev.apps.rm2.thpm.p1.openshiftapps.com/mcp
 tools:
   - "*"
-headers:
-  Authorization: "Bearer ${TODO_MCP_API_TOKEN}"
+connections:
+  - todo_mcp_connection

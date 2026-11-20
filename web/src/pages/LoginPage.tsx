@@ -52,10 +52,10 @@ export const LoginPage: React.FC = () => {
           <Stack gap={6}>
             <div>
               <h2 style={{ fontSize: '1.75rem', fontWeight: 600, margin: 0 }}>
-                ToDO App - Welcome Back
+                World best ToDo App - Welcome Back
               </h2>
               <p style={{ color: 'var(--cds-text-secondary)', marginTop: '0.25rem' }}>
-                Sign in to manage your TODOs 
+                Sign in to manage your tasks 
               </p>
             </div>
 
