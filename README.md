@@ -125,6 +125,67 @@ make compose-down
 
 ---
 
+## Make Targets
+
+All common workflows are available through the [`Makefile`](Makefile). Run `make help` for a short summary.
+
+### Development & Quality
+
+| Target | Description |
+| --- | --- |
+| `make help` | Print the list of available targets. |
+| `make install` | Install all npm dependencies for the `server` and `web` workspaces (`npm install`). |
+| `make dev` | Start the backend (`:8080`) and frontend (`:3000`) dev servers concurrently (`npm run dev`). |
+| `make build` | Build the server and web applications (`npm run build`). |
+| `make test` | Run all unit and integration tests (`npm test`). |
+| `make lint` | Run the linters (`npm run lint`). |
+| `make typecheck` | Run the TypeScript type checks (`npm run typecheck`). |
+
+### Container Images
+
+| Target | Description |
+| --- | --- |
+| `make images` | Build the `todo-api:latest` and `todo-web:latest` images locally with Podman. |
+| `make images-openshift` | Build `linux/amd64` images tagged for Quay (`<QUAY_REGISTRY>/<QUAY_ORG>/todo-{api,web}:<IMAGE_TAG>` and `:latest`). Fails if `QUAY_ORG` is empty. |
+| `make push-quay` | Run `images-openshift`, then push both images (git SHA tag and `latest`) to Quay. Authenticate first with `podman login quay.io`. |
+| `make check-quay-org` | Internal guard used by `images-openshift`; aborts with an error when `QUAY_ORG` is not set. |
+
+### Local Container Stack
+
+| Target | Description |
+| --- | --- |
+| `make compose-up` | Start the local stack (CouchDB, API, Web) in the background using `podman compose` (falls back to `docker compose`). |
+| `make compose-down` | Stop the local stack and remove its volumes (`down -v`). |
+| `make smoke-local` | Run `scripts/smoke.sh` against the local server at `http://127.0.0.1:8080`. |
+
+### OpenShift Deployment
+
+| Target | Description |
+| --- | --- |
+| `make quay-pull-secret` | Create the `quay-pull` image pull secret in the `olaf-hahn-at-dev` namespace and link it to the `todo-app-api` and `todo-app-web` service accounts. Requires `QUAY_USER` and `QUAY_PASSWORD` (a Quay robot account) in the environment. |
+| `make deploy-dev` | Create the `todo-app-secret` Secret from `.env.openshift` and apply the `deploy/overlays/dev` Kustomize overlay. Copy `.env.example` to `.env.openshift` first. |
+| `make smoke-openshift` | Look up the `todo-app-web` Route host and run `scripts/smoke.sh` against it over HTTPS. |
+| `make undeploy-dev` | Delete everything created by the dev overlay (`oc delete -k deploy/overlays/dev`). |
+
+### Configurable Variables
+
+Override these on the command line or through the environment:
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `QUAY_REGISTRY` | `quay.io` | Container registry host. |
+| `QUAY_ORG` | `olaf_hahn_at/todoapp-bob-oh` | Quay namespace/repository path for the images. |
+| `IMAGE_TAG` | short git SHA (or `latest`) | Tag applied in addition to `latest`; used by the prod overlay. |
+| `OPENSHIFT_PLATFORM` | `linux/amd64` | Target platform for `images-openshift`. |
+| `QUAY_USER` / `QUAY_PASSWORD` | _unset_ | Robot account credentials for `quay-pull-secret` (environment only, never stored in the repo). |
+
+Example:
+```bash
+make push-quay QUAY_ORG=my-org IMAGE_TAG=v1.0.0
+```
+
+---
+
 ## Administrator Account & Statistics
 
 On first startup, the server automatically bootstraps a default admin account with email set by `ADMIN_EMAIL` (default: `admin@example.com`) and a cryptographically secure random password.
