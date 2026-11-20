@@ -25,7 +25,7 @@ spec:
       containers:
         - name: web
           image: todo-web:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

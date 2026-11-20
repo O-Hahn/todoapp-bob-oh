@@ -29,13 +29,32 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
+  name: todo-app-web-to-api
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: api
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: web
+      ports:
+        - protocol: TCP
+          port: 8080
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
   name: todo-app-api-egress
 spec:
   podSelector:
     matchLabels:
       app.kubernetes.io/component: api
   egress:
-    # Allow DNS
+    # Allow DNS (OpenShift DNS pods listen on 5353; the service port 53 is DNAT'ed to it)
     - to:
         - namespaceSelector: {}
       ports:
@@ -43,12 +62,18 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
-    # Allow external HTTPS for Cloudant & K8s API
+        - protocol: UDP
+          port: 5353
+        - protocol: TCP
+          port: 5353
+    # Allow external HTTPS for Cloudant & K8s API (443 via service, 6443 after DNAT)
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0
       ports:
         - protocol: TCP
           port: 443
+        - protocol: TCP
+          port: 6443
   policyTypes:
     - Egress

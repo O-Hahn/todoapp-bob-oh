@@ -5,7 +5,6 @@ namespace: olaf-hahn-at-dev
 
 resources:
   - ../../base
-  - ../../build
 
 configMapGenerator:
   - name: todo-app-config
@@ -19,8 +18,8 @@ configMapGenerator:
 
 images:
   - name: todo-api
-    newName: image-registry.openshift-image-registry.svc:5000/olaf-hahn-at-dev/todo-api
+    newName: quay.io/olaf_hahn_at/todoapp-bob-oh/todo-api
     newTag: latest
   - name: todo-web
-    newName: image-registry.openshift-image-registry.svc:5000/olaf-hahn-at-dev/todo-web
+    newName: quay.io/olaf_hahn_at/todoapp-bob-oh/todo-web
     newTag: latest
