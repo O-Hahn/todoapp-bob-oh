@@ -10,3 +10,11 @@ venv
 todo-admin-initial.txt
 admin-initial-password.txt
 .env.openshift
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+terraform.tfvars
+*.auto.tfvars

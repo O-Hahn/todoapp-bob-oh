@@ -178,6 +178,8 @@ The application exposes a **Streamable HTTP MCP endpoint** at `/mcp` protected b
 
 ## OpenShift Deployment (Kustomize)
 
+> To provision the IBM Cloudant and watsonx Orchestrate instances with Terraform, see [`terraform/README.md`](terraform/README.md).
+
 ### 1. Create Secret for Cloudant Credentials
 Create `todo-app-secret` in your target namespace with your external IBM Cloudant instance details:
 ```bash

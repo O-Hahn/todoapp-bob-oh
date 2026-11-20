@@ -1,0 +1,12 @@
+# Copy to terraform.tfvars (git-ignored) and fill in. No secrets belong in this file.
+region              = "<ibm-cloud-region>"
+resource_group_name = "<existing-resource-group>"
+
+cloudant_name = "todo-app-cloudant"
+cloudant_plan = "<cloudant-plan>"
+# cloudant_capacity = 1
+
+orchestrate_name = "todo-app-orchestrate"
+orchestrate_plan = "<orchestrate-plan>"
+
+# tags = ["project:todo-app"]
